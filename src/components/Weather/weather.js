@@ -63,8 +63,11 @@ class Weather extends React.Component {
   requestWeather = () => {
     if(this.state.selectedService) {
       if(this.state.selectedService === 'WeatherBIT'){
-        if(this.state.latitude){
-          fetch(`https://api.weatherbit.io/v2.0/current?&lat=${this.state.latitude}&lon=${this.state.longitude}&key=${WEATHER_BIT_KEY}`)
+          fetch(`https://api.weatherbit.io/v2.0/current?&lat=${this.state.latitude ?
+            this.state.latitude :
+              localStorage.getItem('latitude')}&lon=${this.state.longitude ?
+            this.state.longitude : 
+              localStorage.getItem('longitude')}&key=${WEATHER_BIT_KEY}`)
             .then(function(response) {
               return response.json();
             })
@@ -74,21 +77,12 @@ class Weather extends React.Component {
                 UV: json.data[0].uv
               })
             })     
-        } else if (localStorage.getItem('latitude')) {
-          fetch(`https://api.weatherbit.io/v2.0/current?&lat=${localStorage.getItem('latitude')}&lon=${localStorage.getItem('longitude')}&key=${WEATHER_BIT_KEY}`)
-            .then(function(response) {
-              return response.json();
-            })
-            .then(json => {
-              localStorage.setItem('UV', json.data[0].uv)
-              this.setState({
-                UV: json.data[0].uv
-              })
-            })  
-        }
       } else {
-        if(this.state.latitude){
-          fetch(`https://api.openuv.io/api/v1/uv?lat=${this.state.latitude}&lng=${this.state.longitude}`, {
+          fetch(`https://api.openuv.io/api/v1/uv?lat=${this.state.latitude ?
+            this.state.latitude :
+              localStorage.getItem('latitude')}&lng=${this.state.longitude ?
+            this.state.longitude : 
+              localStorage.getItem('longitude')}`, {
             headers: {
               'x-access-token': OPEN_UV_KEY
             }
@@ -102,22 +96,6 @@ class Weather extends React.Component {
               UV: json.result.uv
             })
           })
-        } else if (localStorage.getItem('latitude')) {
-          fetch(`https://api.openuv.io/api/v1/uv?lat=${localStorage.getItem('latitude')}&lng=${localStorage.getItem('longitude')}`, {
-            headers: {
-              'x-access-token': OPEN_UV_KEY
-            }
-          })
-          .then(function(response) {
-            return response.json();
-          })
-          .then(json => {
-            localStorage.setItem('UV', json.result.uv)
-            this.setState({
-              UV: json.result.uv
-            })
-          })
-        }   
       }
     }
   }

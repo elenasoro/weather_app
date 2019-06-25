@@ -1,5 +1,5 @@
 import React from 'react';
-const API_KEY = 'AIzaSyC4m5FfMQFFqm_WYCUEL7VOy9CpP_qj2pY';
+const API_KEY = 'AIzaSyAkJ5sz-qU12TYKuiEqr8eGl18rgUyUYY4';
 
 
 class CurrentLocation extends React.Component {
